@@ -10,8 +10,17 @@ app.set('view engine', 'handlebars');
 
 app.set('port', process.env.PORT || 3000);
 
+var userInfo = [{name: "zhangym", password: "password1"},
+  {name: "hanf", password: "password2"},
+  {name: "admin", password: "jujube666"}
+];
+var credentials = require('./server/credentials.js');
+
+
 app.use(express.static(__dirname + '/public'));
 app.use(require('body-parser')());
+app.use(require('cookie-parser')(credentials.cookieSecret));
+app.use(require('express-session')());
 var fortuneCookies = [
   "Conquer your fears or they will conquer you.",
   "Rivers need springs.",
@@ -19,12 +28,12 @@ var fortuneCookies = [
   "You will have a pleasant surprise.",
   "Whenever possible, keep it simple.",
 ];
-var userInfo = [{name: "zhangym", password: "password1"},
-  {name: "hanf", password: "password2"},
-  {name: "admin", password: "jujube666"}
-];
 
 app.get('/', function (req, res) {
+  console.log(req.session.loginInfo)
+  if (!req.session.loginInfo) {
+    res.redirect('/login');
+  }
   res.render('home');
 });
 
@@ -35,7 +44,7 @@ app.get('/login', function (req, res) {
 app.post('/loginPost', function (req, res) {
   for (var i = 0; i < userInfo.length; i++) {
     if (userInfo[i].name === req.body.username && userInfo[i].password === req.body.password) {
-
+      req.session.loginInfo = "";
       res.send({success: true, state: '200'});
       break;
     }
@@ -44,9 +53,7 @@ app.post('/loginPost', function (req, res) {
       break;
     }
   }
-  if (i == userInfo.length) {
-    res.send({error: 'error descript'});
-  }
+  res.send({error: 'error descript'});
 });
 
 
@@ -67,3 +74,5 @@ app.listen(app.get('port'), function () {
   console.log('Express started on http://localhost:' +
     app.get('port') + '; press Ctrl-C to terminate.');
 });
+
+
