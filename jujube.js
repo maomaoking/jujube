@@ -15,6 +15,7 @@ var userInfo = [{name: "zhangym", password: "password1"},
   {name: "admin", password: "jujube666"}
 ];
 var credentials = require('./server/credentials.js');
+var serverLib = require('./server/lib.js');
 
 
 app.use(express.static(__dirname + '/public'));
@@ -31,10 +32,11 @@ var fortuneCookies = [
 
 app.get('/', function (req, res) {
   console.log(req.session.loginInfo)
-  if (!req.session.loginInfo) {
+  if (!serverLib.checkLoginTimeOut(req.session.loginInfo)) {
     res.redirect('/login');
+  } else {
+    res.render('home');
   }
-  res.render('home');
 });
 
 app.get('/login', function (req, res) {
@@ -44,13 +46,13 @@ app.get('/login', function (req, res) {
 app.post('/loginPost', function (req, res) {
   for (var i = 0; i < userInfo.length; i++) {
     if (userInfo[i].name === req.body.username && userInfo[i].password === req.body.password) {
-      req.session.loginInfo = "";
+      req.session.loginInfo = "success-"+ new Date().valueOf();
       res.send({success: true, state: '200'});
-      break;
+      return;
     }
     if (userInfo[i].name === req.body.username && userInfo[i].password !== req.body.password) {
       res.send({success: true, state: '201', errorMessage: '密码错误'});
-      break;
+      return;
     }
   }
   res.send({error: 'error descript'});
