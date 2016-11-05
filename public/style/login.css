@@ -1,0 +1,45 @@
+html,body,div{
+    padding:0px;
+    margin:0px;
+}
+body {
+    background: url(../img/bg_login.jpg) no-repeat 0px 0px;
+    background-size: 100% auto;
+}
+.loginTitle{
+    position: absolute;
+    top:5%;
+    margin-left:100px;
+    width:160px;
+    height:80px;
+    background: url(../img/logo-login.png) no-repeat 0px 0px;
+    background-size: 160px 80px;
+}
+.loginForm{
+    position: absolute;
+    top:50%;
+
+}
+.loginFormInner{
+    width:320px;
+    height:320px;
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 10px;
+    margin-top:-150px;
+    margin-left:200px;
+    border:1px solid #efefef;
+    padding:50px;
+}
+.loginBottom{
+    margin-left:200px;
+    position: absolute;
+    bottom:10%;
+    color: #232323;
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.loginBottom .SubBottomText{
+    font-size: 18px;
+    color: #2D4B45
+}
